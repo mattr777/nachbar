@@ -2,24 +2,62 @@
 <html>
 <head>
     <style type="text/css">
-        html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+        html, body, #map-canvas {
+            height: 90%;
+            margin: 0;
+            padding: 0;
+        }
     </style>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwTgR8Ipsvr1rqix2iWpJy_P2ASxjr_Io">
     </script>
     <script type="text/javascript">
         function initialize() {
+            var myPosition = new google.maps.LatLng(38.9597,-104.7915);
             var mapOptions = {
-                center: { lat: 39.005597, lng: -104.700424},
-                zoom: 15
+                center: myPosition,
+                zoom: 17 // set zoom level based on window size viewport
             };
             var map = new google.maps.Map(document.getElementById('map-canvas'),
                     mapOptions);
+
+            myPosition = new google.maps.LatLng(38.9587,-104.7919);
+            var marker = new google.maps.Marker({
+                position: myPosition,
+                map: map,
+                title: 'Work'
+            });
+            myPosition = new google.maps.LatLng(38.9568,-104.7878);
+            marker = new google.maps.Marker({
+                position: myPosition,
+                map: map,
+                title: 'Nice Park'
+            });
+            myPosition = new google.maps.LatLng(38.9598,-104.7878);
+            marker = new google.maps.Marker({
+                position: myPosition,
+                map: map,
+                title: 'Post Office'
+            });
+            myPosition = new google.maps.LatLng(38.9627,-104.7960);
+            marker = new google.maps.Marker({
+                position: myPosition,
+                map: map,
+                title: 'Good Food'
+            });
         }
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 </head>
 <body>
+<label for="search">Search Locations</label>
+<input id="search" placeholder="Good Food" autofocus><button>Search Now</button>
 <div id="map-canvas"></div>
+<ul>
+    <li>Work</li>
+    <li>Nice Park</li>
+    <li>Post Office</li>
+    <li>Good Food</li>
+</ul>
 </body>
 </html>
