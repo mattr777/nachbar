@@ -1,0 +1,10 @@
+html, body, .container-fluid, .row, .map {
+    height: 100%
+}
+
+#map-canvas {
+    height: 100%;
+    height: calc(100% - 0px);
+    margin: 0;
+    padding: 0;
+}
