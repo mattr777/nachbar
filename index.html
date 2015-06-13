@@ -18,12 +18,11 @@
     <div class="row">
         <div class="col-md-2">
             <form>
-                <h3><label for="filter">Search</label></h3>
-                <input id="filter" placeholder="food" autofocus>
-                <button>Search!</button>
+                <h3><label for="filter">Filter</label></h3>
+                <input type="text" id="filter" data-bind="value: filterString, valueUpdate: 'keyup'" placeholder="food, fun, or work">
             </form>
             <h3>Interesting Places</h3>
-            <ul data-bind="foreach: markers">
+            <ul data-bind="foreach: visiblePlaces">
                 <li data-bind="text: title"></li>
             </ul>
         </div>
