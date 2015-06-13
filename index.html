@@ -5,6 +5,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
+    <title>Mr Richards Neighborhood</title>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwTgR8Ipsvr1rqix2iWpJy_P2ASxjr_Io"></script>
     <script src='js/jquery-2.1.4.min.js'></script>
     <script src='js/knockout-3.3.0.js'></script>
@@ -14,20 +16,18 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <form>
-                <label for="search">Search</label>
-                <input id="search" placeholder="Good Food" autofocus>
-                <button>Search Now</button>
+                <h3><label for="filter">Search</label></h3>
+                <input id="filter" placeholder="food" autofocus>
+                <button>Search!</button>
             </form>
-            <ul>
-                <li>Work</li>
-                <li>Nice Park</li>
-                <li>Post Office</li>
-                <li>Good Food</li>
+            <h3></h3>
+            <ul data-bind="foreach: markers">
+                <li data-bind="text: title"></li>
             </ul>
         </div>
-        <div id="map-canvas" class="col-md-9"></div>
+        <div id="map-canvas" class="col-md-10"></div>
     </div>
 </div>
 </body>
