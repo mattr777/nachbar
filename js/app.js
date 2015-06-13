@@ -2,13 +2,24 @@
  * Create an array of interesting places that we will turn in to Google map markers
  * @type {*[]}
  */
-var markers = [];
+var places = [];
 
-/**
- * Array of Google marker objects
- * @type {Array}
- */
-var googleMarkers = [];
+var InterestingPlace = function(title, category, googleMap, lat, lon) {
+    this.title = title;
+    this.category = category;
+    this.googleMarker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, lon),
+        map: googleMap,
+        title: title
+    });
+    this.infoWindow = new google.maps.InfoWindow({
+        content: title
+    });
+    google.maps.event.addListener(this.googleMarker, 'click', function() {
+        var self = this;
+        self.infoWindow.open(googleMap, self.googleMarker)
+    }.bind(this));
+};
 
 function initializeMap() {
     /**
@@ -26,45 +37,18 @@ function initializeMap() {
     /**
      *  Add interesting places to our map
      */
-    markers.push({
-        position: new google.maps.LatLng(38.9587, -104.7919),
-        map: map,
-        title: 'Work',
-        category: 'work'
-    });
-    markers.push({
-        position: new google.maps.LatLng(38.9568, -104.7878),
-        map: map,
-        title: 'Nice Park',
-        category: 'fun'
-    });
-    markers.push({
-        position: new google.maps.LatLng(38.9598, -104.7878),
-        map: map,
-        title: 'Post Office',
-        category: 'work'
-    });
-    markers.push({
-        position: new google.maps.LatLng(38.9627, -104.7960),
-        map: map,
-        title: 'Bird Dog BBQ',
-        category: 'food'
-    });
-    markers.push({
-        position: new google.maps.LatLng(38.9626, -104.7945),
-        map: map,
-        title: 'Panera',
-        category: 'food'
-    });
+    places.push(new InterestingPlace('Work', 'work', map, 38.9587, -104.7919));
+    places.push(new InterestingPlace('Nice Park', 'fun', map, 38.9568, -104.7878));
+    places.push(new InterestingPlace('Post Office', 'work', map, 38.9598, -104.7878));
+    places.push(new InterestingPlace('Bird Dog BBQ', 'food', map, 38.9627, -104.7960));
+    places.push(new InterestingPlace('Panera', 'food', map, 38.9626, -104.7945));
 
+    // Automatically center the map fitting all places on the screen
     var bounds = new google.maps.LatLngBounds();
-    var markersLength = markers.length;
+    var markersLength = places.length;
     for (var i = 0; i < markersLength; i++) {
-        bounds.extend(markers[i].position);
-        var googleMarker = new google.maps.Marker(markers[i]);
-        googleMarkers.push(googleMarker);
+        bounds.extend(places[i].googleMarker.getPosition());
     }
-    // Automatically center the map fitting all vmMarkers on the screen
     map.fitBounds(bounds);
 
     // bind our view model to knockout now that everything is created
@@ -80,26 +64,19 @@ google.maps.event.addDomListener(window, 'load', initializeMap);
 var ViewModel = function () {
     var self = this;
 
-    self.vmMarkers = ko.observableArray(markers);
+    self.vmMarkers = ko.observableArray(places);
     self.filterString = ko.observable("");
     self.filterPlaces = ko.computed(function () {
         var markersLength = self.vmMarkers().length;
         console.log('markersLenth: ' + markersLength + ', filterString: ' + self.filterString());
-        //for (var i = 0; i < markersLength; i++) {
-        //    if (this.vmMarkers()[i].title === searchString) {
-        //        googleMarkers[i].setVisible(true);
-        //    } else {
-        //        googleMarkers[i].visible(false);
-        //    }
-        //}
     });
     self.visiblePlaces = ko.computed(function () {
-        var markersLength = markers.length;
+        var placesLength = places.length;
         var returnArray = [];
-        for (var i = 0; i < markersLength; i++) {
-            var checkString = markers[i].title.toLowerCase() + ' ' + markers[i].category.toLowerCase();
+        for (var i = 0; i < placesLength; i++) {
+            var checkString = places[i].title.toLowerCase() + ' ' + places[i].category.toLowerCase();
             if (checkString.indexOf(self.filterString().toLowerCase()) !== -1) {
-                returnArray.push(markers[i]);
+                returnArray.push(places[i]);
             }
         }
         return returnArray;
