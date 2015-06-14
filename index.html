@@ -23,7 +23,7 @@
             </form>
             <h3>Interesting Places</h3>
             <ul data-bind="foreach: visiblePlaces">
-                <li data-bind="text: title"></li>
+                <li data-bind="text: title+' ['+category+']', click: openInfoWindow"></li>
             </ul>
         </div>
         <div id="map-canvas" class="col-md-10"></div>
