@@ -3,6 +3,11 @@
  * @type {*[]}
  */
 var places = [];
+
+/**
+ * Components of NY Times article search API used to retrieve news about places
+ * @type {string}
+ */
 var nyTimesURL1 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq="';
 var nyTimesURL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:72240625&fl=web_url,headline';
 
@@ -17,26 +22,37 @@ var nyTimesURL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:722
  * @constructor
  */
 var InterestingPlace = function (title, category, googleMap, lat, lon) {
+    // title and category used to describe place
     this.title = title;
     this.category = category;
+
+    // google.maps.Marker object that is used to place us on the map
     this.googleMarker = new google.maps.Marker({
         position: new google.maps.LatLng(lat, lon),
         map: googleMap,
         title: title
     });
+
+    // google.maps.InfoWindow that is used to display information about the place
     this.infoWindow = new google.maps.InfoWindow({
         content: title
     });
+
+    // function to display information when a user clicks us in the list view
     this.openInfoWindow = function () {
         closeInfoWindows();
         this.infoWindow.open(googleMap, this.googleMarker);
     };
+
+    // register for clicks on the marker object and display information when clicked
     google.maps.event.addListener(this.googleMarker, 'click', function () {
         var self = this;
         closeInfoWindows();
         self.infoWindow.open(googleMap, self.googleMarker);
     }.bind(this));
 
+    // asynchronously load content about the place in the info window when available
+    // only show one story to reduce clutter
     $.getJSON(nyTimesURL1 + this.title + nyTimesURL2, function (data) {
         var self = this;
         var articles = data.response.docs;
@@ -61,8 +77,6 @@ function initializeMap() {
     var mapOptions = {
         center: new google.maps.LatLng(38.9597, -104.7915),
         zoom: 17
-        // TODO: set zoom level based on window size viewport
-        // TODO: weather api
     };
     var map = new google.maps.Map(document.getElementById('map-canvas'),
         mapOptions);
