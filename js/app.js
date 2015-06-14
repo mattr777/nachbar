@@ -76,7 +76,10 @@ var ViewModel = function () {
         for (var i = 0; i < placesLength; i++) {
             var checkString = places[i].title.toLowerCase() + ' ' + places[i].category.toLowerCase();
             if (checkString.indexOf(self.filterString().toLowerCase()) !== -1) {
+                places[i].googleMarker.setVisible(true);
                 returnArray.push(places[i]);
+            } else {
+                places[i].googleMarker.setVisible(false);
             }
         }
         return returnArray;
