@@ -3,7 +3,7 @@
  * @type {*[]}
  */
 var places = [];
-var nyTimesURL1 = 'http://api.asdfasdfnytimes.com/svc/search/v2/articlesearch.json?fq="';
+var nyTimesURL1 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq="';
 var nyTimesURL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:72240625&fl=web_url,headline';
 
 /**
