@@ -3,6 +3,8 @@
  * @type {*[]}
  */
 var places = [];
+var nyTimesURL1 = 'http://api.asdfasdfnytimes.com/svc/search/v2/articlesearch.json?fq="';
+var nyTimesURL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:72240625&fl=web_url,headline';
 
 /**
  * Constructor for the main object in our system.  This represents an interesting place
@@ -14,7 +16,7 @@ var places = [];
  * @param lon Longitude for marker on map.
  * @constructor
  */
-var InterestingPlace = function(title, category, googleMap, lat, lon) {
+var InterestingPlace = function (title, category, googleMap, lat, lon) {
     this.title = title;
     this.category = category;
     this.googleMarker = new google.maps.Marker({
@@ -25,13 +27,29 @@ var InterestingPlace = function(title, category, googleMap, lat, lon) {
     this.infoWindow = new google.maps.InfoWindow({
         content: title
     });
-    google.maps.event.addListener(this.googleMarker, 'click', function() {
+    this.openInfoWindow = function () {
+        closeInfoWindows();
+        this.infoWindow.open(googleMap, this.googleMarker);
+    };
+    google.maps.event.addListener(this.googleMarker, 'click', function () {
         var self = this;
-        self.infoWindow.open(googleMap, self.googleMarker)
+        closeInfoWindows();
+        self.infoWindow.open(googleMap, self.googleMarker);
     }.bind(this));
-    this.openInfoWindow = function() {
-        this.infoWindow.open(googleMap, this.googleMarker)
-    }
+
+    $.getJSON(nyTimesURL1 + this.title + nyTimesURL2, function (data) {
+        var self = this;
+        var articles = data.response.docs;
+        if (articles.length > 0) {
+            var article = articles[0];
+            self.infoWindow.setContent('<a href="' + article.web_url + '">' + article.headline.main + '</a>');
+        } else {
+            self.infoWindow.setContent('<p>No related stories in NY Times currently.</p>');
+        }
+    }.bind(this)).error(function () {
+        var self = this;
+        self.infoWindow.setContent('<p>Unable to retrieve NY Times content.</p>');
+    }.bind(this));
 };
 
 /**
@@ -50,9 +68,9 @@ function initializeMap() {
         mapOptions);
 
     // Add interesting places to our map
-    places.push(new InterestingPlace('Work', 'work', map, 38.9587, -104.7919));
+    places.push(new InterestingPlace('Fluke Networks', 'work', map, 38.9587, -104.7919));
     places.push(new InterestingPlace('Nice Park', 'fun', map, 38.9568, -104.7878));
-    places.push(new InterestingPlace('Post Office', 'work', map, 38.9598, -104.7878));
+    places.push(new InterestingPlace('US Post Office', 'work', map, 38.9598, -104.7878));
     places.push(new InterestingPlace('Bird Dog BBQ', 'food', map, 38.9627, -104.7960));
     places.push(new InterestingPlace('Panera', 'food', map, 38.9626, -104.7945));
 
@@ -81,6 +99,7 @@ var ViewModel = function () {
     self.filterString = ko.observable("");
 
     // array of places that should be visible according to filter string
+    // also set visibility of google markers
     self.visiblePlaces = ko.computed(function () {
         var placesLength = places.length;
         var returnArray = [];
@@ -91,9 +110,19 @@ var ViewModel = function () {
                 returnArray.push(places[i]);
             } else {
                 places[i].googleMarker.setVisible(false);
+                places[i].infoWindow.close();
             }
         }
         return returnArray;
     });
 };
 
+/**
+ * Utility function to close all infoWindows
+ */
+var closeInfoWindows = function() {
+    var placesLength = places.length;
+    for (var i = 0; i < placesLength; i++) {
+        places[i].infoWindow.close();
+    }
+};
