@@ -1,8 +1,8 @@
-html, body, .container-fluid, .row, .map {
-    height: 100%
+html, body, .container-fluid, .row {
+    height: 100%;
 }
 
-#map-canvas {
+.map {
     height: 100%;
     height: calc(100% - 0px);
     margin: 0;

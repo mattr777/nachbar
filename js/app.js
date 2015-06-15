@@ -8,8 +8,8 @@ var places = [];
  * Components of NY Times article search API used to retrieve news about places
  * @type {string}
  */
-var nyTimesURL1 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq="';
-var nyTimesURL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:72240625&fl=web_url,headline';
+var NY_TIMES_URL1 = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq="';
+var NY_TIMES_URL2 = '"&sort=newest&api-key=ddbcaf1b7406d615b0a8ce133bd34ceb:19:72240625&fl=web_url,headline';
 
 /**
  * Constructor for the main object in our system.  This represents an interesting place
@@ -41,6 +41,7 @@ var InterestingPlace = function (title, category, googleMap, lat, lon) {
     // function to display information when a user clicks us in the list view
     this.openInfoWindow = function () {
         closeInfoWindows();
+        googleMap.setCenter(this.googleMarker.getPosition());
         this.infoWindow.open(googleMap, this.googleMarker);
     };
 
@@ -48,12 +49,13 @@ var InterestingPlace = function (title, category, googleMap, lat, lon) {
     google.maps.event.addListener(this.googleMarker, 'click', function () {
         var self = this;
         closeInfoWindows();
+        googleMap.setCenter(self.googleMarker.getPosition());
         self.infoWindow.open(googleMap, self.googleMarker);
     }.bind(this));
 
     // asynchronously load content about the place in the info window when available
     // only show one story to reduce clutter
-    $.getJSON(nyTimesURL1 + this.title + nyTimesURL2, function (data) {
+    $.getJSON(NY_TIMES_URL1 + this.title + NY_TIMES_URL2, function (data) {
         var self = this;
         var articles = data.response.docs;
         if (articles.length > 0) {
@@ -99,6 +101,9 @@ function initializeMap() {
     // bind our view model to knockout now that everything is created
     ko.applyBindings(new ViewModel());
 
+    $('#first').collapsible({
+        animate: false
+    });
 }
 google.maps.event.addDomListener(window, 'load', initializeMap);
 
@@ -148,4 +153,4 @@ var run = function () {
     if (Offline.state === 'up')
         Offline.check();
 };
-setInterval(run, 5000);
+//setInterval(run, 5000);
