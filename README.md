@@ -13,4 +13,5 @@
 * [Knockout](http://knockoutjs.com/)
 * [Boostrap](http://getbootstrap.com/)
 * [jQuery](https://jquery.com/)
-* [NY Times Article Search API v2](http://developer.nytimes.com/docs/read/article_search_api_v2) 
+* [NY Times Article Search API v2](http://developer.nytimes.com/docs/read/article_search_api_v2)
+* [offline](https://github.com/hubspot/offline)
