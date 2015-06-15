@@ -140,3 +140,12 @@ var closeInfoWindows = function() {
         places[i].infoWindow.close();
     }
 };
+
+/**
+ * Run offline check every 5 seconds
+ */
+var run = function () {
+    if (Offline.state === 'up')
+        Offline.check();
+};
+setInterval(run, 5000);
