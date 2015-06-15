@@ -8,3 +8,42 @@ html, body, .container-fluid, .row {
     margin: 0;
     padding: 0;
 }
+
+@media (max-width: 767px) {
+    .map {
+        height: 80%;
+        height: calc(80% - 0px);
+        margin: 0;
+        padding: 0;
+    }
+}
+.filter {
+    width: 100%;
+}
+
+h3 {
+    font-size: 1.17em;
+}
+
+.arrow-r {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #444;
+    margin-bottom: 1%;
+    margin-right: 7px;
+    margin-left: 3px;
+    display: inline-block;
+}
+
+.arrow-d {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #444;
+    margin-bottom: 6px;
+    margin-right: 5px;
+    display: inline-block;
+}
