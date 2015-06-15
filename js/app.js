@@ -153,4 +153,4 @@ var run = function () {
     if (Offline.state === 'up')
         Offline.check();
 };
-//setInterval(run, 5000);
+setInterval(run, 5000);
