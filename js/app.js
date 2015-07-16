@@ -84,7 +84,7 @@ function initializeMap() {
         mapOptions);
 
     // Add interesting places to our map
-    places.push(new InterestingPlace('Fluke Networks', 'work', map, 38.9587, -104.7919));
+    places.push(new InterestingPlace('NetScout Systems', 'work', map, 38.9587, -104.7919));
     places.push(new InterestingPlace('Nice Park', 'fun', map, 38.9568, -104.7878));
     places.push(new InterestingPlace('US Post Office', 'work', map, 38.9598, -104.7878));
     places.push(new InterestingPlace('Bird Dog BBQ', 'food', map, 38.9627, -104.7960));
